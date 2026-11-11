@@ -1,8 +1,11 @@
 import type { AuthConfig } from "convex/server";
 
 // Optional federated sign-in for deployments that issue their own JWTs.
-// It is enabled only when the issuer is configured on the Convex deployment.
+// It stays disabled until the deployment sets a real issuer URL.
 const federatedIssuer = process.env.VLY_CONVEX_AUTH_ISSUER;
+// `VLY_CONVEX_AUTH_ISSUER` is the deployment auth issuer. Set it only if you
+// add federated sign-in. Otherwise leave it empty so the federated path stays
+// disabled and your JWTs keep using the deployment's own provider.
 
 export default {
   providers: [
@@ -22,6 +25,8 @@ export default {
             issuer: federatedIssuer,
             jwks: `${federatedIssuer}/api/web/.well-known/jwks.json`,
             applicationID: "vly-convex",
+// `vly-convex` is the deployment's default app id. Replace it with your own
+// application id when you add a custom federated provider.
             algorithm: "RS256" as const,
           },
         ]
