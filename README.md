@@ -14,7 +14,7 @@ src/                     docs site and signed-in trace workbench
 src/convex/              Convex schema and trace storage
 ```
 
-The workbench is a Vite, React, and Convex app. It runs sample scenarios through the real inspector core in the browser, then saves the resulting trace for inspection. The sample model responses are simulated and labeled as such in the UI. No provider keys are used.
+The workbench is a Vite, React, and Convex app. It runs sample scenarios through the real inspector core in the browser, then saves the resulting trace for inspection. The sample model responses are simulated and labeled as such in the UI. No provider keys are used for the demo scenarios.
 
 ## Package
 
@@ -58,7 +58,7 @@ bun convex dev --once
 bun tsc -b --noEmit
 ```
 
-Authentication files (`src/convex/auth.ts`, `src/convex/auth.config.ts`, and `src/convex/auth/emailOtp.ts`) are part of the starter setup and should not be modified.
+Authentication uses Convex Auth with email codes and guest sign-in. Email delivery needs `AUTH_EMAIL_GATEWAY_URL` and `AUTH_EMAIL_GATEWAY_KEY` configured on the Convex deployment; the hosted preview supplies equivalent deployment settings. Provider secrets belong in Convex environment variables, not the Vite app.
 
 ## Verification
 
@@ -69,6 +69,21 @@ bun run inspector:test
 ```
 
 The package test suite covers trace lifecycles, async context isolation, capture and redaction, pricing, exporter failure handling, evals, AI SDK and OpenAI adapters, streaming, and OTLP mapping.
+
+## Publishing
+
+The npm scope in `packages/ai-inspector/package.json` is a placeholder. Replace `@yourname/ai-inspector` with an available name, add your `repository`, `homepage`, and `bugs` URLs, then publish from the package directory:
+
+```bash
+cd packages/ai-inspector
+npm login
+npm run typecheck
+npm test
+npm run build
+npm publish --access public
+```
+
+For later releases, run `npm version patch` (or `minor`/`major`) before `npm publish`. To deploy the workbench, run `bun run build` and serve the `dist` directory from a static host with `VITE_CONVEX_URL` set to the production Convex URL. Deploy the backend with `bunx convex deploy` and configure its environment variables in the Convex dashboard.
 
 ## License
 

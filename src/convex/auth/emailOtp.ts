@@ -18,38 +18,44 @@ export const emailOtp = Email({
   async sendVerificationRequest({ identifier: email, token }) {
     try {
       await axios.post(
-        freebuffEmailOtpUrl(),
+        emailGatewayUrl(),
         { to: email, otp: token },
-        { headers: freebuffEmailOtpHeaders() },
+        { headers: emailGatewayHeaders() },
       );
     } catch (error) {
-      throw freebuffEmailOtpError(error);
+      throw emailGatewayError(error);
     }
   },
 });
 
-// Sign-in codes are sent by the Freebuff integrations gateway, which knows
-// this project by its own key: VLY_INTEGRATION_KEY, a Convex environment
-// variable set when the project was created. The email's wording is fixed by
-// the gateway.
-function freebuffEmailOtpUrl(): string {
+// Sign-in codes are delivered by a small HTTP email gateway. Configure
+// AUTH_EMAIL_GATEWAY_URL and AUTH_EMAIL_GATEWAY_KEY on the Convex deployment.
+// The VLY_* variables are read as fallbacks so existing deployments keep
+// working without a migration.
+function emailGatewayUrl(): string {
   const base =
-    process.env.VLY_INTEGRATION_BASE_URL || "https://integrations.vly.ai";
+    process.env.AUTH_EMAIL_GATEWAY_URL ?? process.env.VLY_INTEGRATION_BASE_URL;
+  if (!base) {
+    throw new Error(
+      "AUTH_EMAIL_GATEWAY_URL is not set on this Convex deployment, so email sign-in cannot send codes.",
+    );
+  }
   return `${base.replace(/\/+$/, "")}/v1/email/otp`;
 }
 
-function freebuffEmailOtpHeaders(): Record<string, string> {
-  const key = process.env.VLY_INTEGRATION_KEY;
+function emailGatewayHeaders(): Record<string, string> {
+  const key =
+    process.env.AUTH_EMAIL_GATEWAY_KEY ?? process.env.VLY_INTEGRATION_KEY;
   if (!key) {
     throw new Error(
-      "VLY_INTEGRATION_KEY is not set on this Convex deployment, so email sign-in cannot send codes.",
+      "AUTH_EMAIL_GATEWAY_KEY is not set on this Convex deployment, so email sign-in cannot send codes.",
     );
   }
   return { Authorization: `Bearer ${key}` };
 }
 
 // Never stringify the whole request error: it carries the request headers.
-function freebuffEmailOtpError(error: unknown): Error {
+function emailGatewayError(error: unknown): Error {
   const response = (
     error as { response?: { status?: number; data?: { error?: unknown } } }
   )?.response;
@@ -63,3 +69,4 @@ function freebuffEmailOtpError(error: unknown): Error {
   const message = error instanceof Error ? error.message : String(error);
   return new Error(`Could not send the sign-in code: ${message}`);
 }
+
