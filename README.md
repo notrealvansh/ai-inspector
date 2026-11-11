@@ -1,169 +1,248 @@
-AI Inspector
+## AI Inspector
 
-<p align="center">
-  <strong>Local-first observability for TypeScript AI applications.</strong>
-</p><p align="center">
-  Inspect LLM calls, token usage, latency, tool executions and evaluations — without mandatory cloud infrastructure.
-</p><p align="center">
-  <a href="https://www.npmjs.com/package/@lithiumdevs/ai-inspector">
-    <img src="https://img.shields.io/npm/v/@lithiumdevs/ai-inspector" alt="npm version">
-  </a>
-  <a href="https://www.npmjs.com/package/@lithiumdevs/ai-inspector">
-    <img src="https://img.shields.io/npm/dm/@lithiumdevs/ai-inspector" alt="npm downloads">
-  </a>
-  <img src="https://img.shields.io/badge/TypeScript-supported-blue" alt="TypeScript">
-  <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License">
-</p>---
+AI observability for TypeScript applications. Trace LLM calls, tokens,
+latency, tool executions, errors, and evaluations — without requiring a
+hosted dashboard.
+AI Inspector is a TypeScript toolkit for observing, debugging, and
+evaluating AI application workflows. It helps developers understand what
+happened during an AI run by recording traces, model-call metadata,
+token usage, latency, tool activity, errors, and evaluation results.
 
-## Overview
-
-AI Inspector is a lightweight observability toolkit designed for TypeScript AI applications.
-
-It helps developers understand what happens inside their AI systems by recording model calls, prompts, responses, token usage, execution time, tool calls and errors.
-
-By default, traces are stored locally in NDJSON format. OpenTelemetry export is available for applications that need external observability infrastructure.
-
-No hosted account is required to get started.
+It is designed to work locally without making a hosted observability
+service mandatory.
 
 ## Features
 
-Feature| Description
-Request tracing| Record model calls, prompts and responses
-Token tracking| Capture input and output token usage
-Latency monitoring| Measure execution time and time to first token
-Tool tracking| Inspect tool executions and results
-Error tracking| Record failures and execution errors
-Cost estimation| Estimate costs using configured model pricing
-Evaluations| Run scorers and record evaluation results
-Local storage| Store traces locally in NDJSON format
-OpenTelemetry| Export traces through OTLP/HTTP
-Data controls| Configure redaction, sampling and captured fields
-
-## Installation
-
-npm install @lithiumdevs/ai-inspector
-
-## Quick Start
-
-Create an inspector and record your first trace.
-
-import { createNodeInspector } from "@lithiumdevs/ai-inspector/node";
-
-const inspector = createNodeInspector({
-  serviceName: "my-ai-app",
-});
-
-await inspector.trace("example-request", async (trace) => {
-  const generation = trace.generation({
-    name: "chat-completion",
-    model: "example-model",
-    provider: "custom",
-  });
-
-  generation.end({
-    output: "Hello from my application",
-    usage: {
-      inputTokens: 10,
-      outputTokens: 5,
-    },
-  });
-});
-
-await inspector.flush();
-await inspector.shutdown();
-
-This example uses sample data to demonstrate trace creation. It does not make a real model request.
-
-For real provider requests, use one of the available integrations.
-
-## Integrations
-
-AI Inspector provides separate entry points for different environments and integrations.
-
-Package| Purpose
-"@lithiumdevs/ai-inspector"| Core tracing API
-"@lithiumdevs/ai-inspector/node"| Node.js preset and local exporter
-"@lithiumdevs/ai-inspector/ai-sdk"| Vercel AI SDK integration
-"@lithiumdevs/ai-inspector/openai"| OpenAI-compatible client integration
-"@lithiumdevs/ai-inspector/otel"| OTLP/HTTP exporter
-
-See the "complete package documentation" (packages/ai-inspector/README.md) for integration setup and API details.
-
-Command Line Interface
-
-Inspect locally recorded traces using the AI Inspector CLI.
-
-npx ai-inspector list
-npx ai-inspector show <trace-id>
-npx ai-inspector stats
-
-## Web Workbench
-
-The repository also includes a web workbench built with:
-
-- React
-- Vite
-- TypeScript
-- Convex
-
-It provides an interface for browsing traces and inspecting individual spans.
-
-Note: The playground currently uses simulated model responses. It does not make real provider requests.
-
-Development
+-   Trace AI workflows — organize related operations into traces and
+    spans.
+-   Record model activity — capture model names, timing, token usage,
+    and call metadata when supplied by an integration.
+-   Inspect tool executions — record tool activity and its outcomes.
+-   Track errors — keep error information alongside the relevant trace.
+-   Run evaluations — use deterministic scorers to evaluate recorded
+    outputs.
+-   Protect sensitive data — configure redaction and sampling.
+-   Local-first storage — the Node preset can write trace data to a
+    local NDJSON file.
+-   Multiple integration paths — use the core API, Node helpers,
+    OpenAI-compatible integration, AI SDK integration, or OpenTelemetry
+    support.
+-   CLI inspection — inspect recorded traces from the terminal.
 
 ## Requirements
 
-- Bun
-- Node.js 18.17 or newer for the Node.js package
+-   Node.js >=18.17
+-   TypeScript projects are supported.
+-   Use a compatible version of the provider or SDK you are integrating
+    with.
 
-Install dependencies
+Installation
 
-bun install
+    npm install @lithiumdevs/ai-inspector
 
-Run package checks
+Or use another package manager:
 
-cd packages/ai-inspector
+    pnpm add @lithiumdevs/ai-inspector
 
-bun run typecheck
-bun run test
-bun run build
+    bun add @lithiumdevs/ai-inspector
 
-Start the workbench
+## Quick Start
 
-From the repository root:
+The following example creates an inspector and records a sample trace.
 
-bun run dev
+    import { createNodeInspector } from "@lithiumdevs/ai-inspector/node";
 
-The workbench requires a configured Convex deployment.
+    const inspector = createNodeInspector({
+      // Configure the local output path using the options supported
+      // by your installed package version.
+    });
 
-Configure "VITE_CONVEX_URL" and the required backend environment variables before using deployment-backed features.
+    const trace = inspector.startTrace({
+      name: "example-ai-workflow",
+    });
 
-Keep private API keys in backend environment variables. Never expose them through frontend Vite variables.
+    const span = trace.startSpan({
+      name: "sample-operation",
+      type: "custom",
+    });
 
-Repository Structure
+    span.setAttribute("example", true);
+    span.end();
 
-ai-inspector/
-├── .github/
-├── packages/
-│   └── ai-inspector/
-├── public/
-├── src/
-│   └── convex/
-├── README.md
-└── package.json
+    trace.end();
+
+    await inspector.flush();
+
+This is an instrumentation example using sample data. It does not make a
+real request to an AI provider. To observe real model calls, connect the
+relevant integration and instrument the provider or SDK calls in your
+application.
+
+  API option names can vary by package version. Check the package
+  documentation and TypeScript definitions for the exact configuration
+  supported by the version you have installed.
+
+## Integrations
+
+AI Inspector provides separate entry points for different integration
+needs.
+
+  -----------------------------------------------------------------------
+  Entry point                         Purpose
+  ----------------------------------- -----------------------------------
+  @lithiumdevs/ai-inspector           Core tracing and inspection APIs
+
+  @lithiumdevs/ai-inspector/node      Node.js helpers and local trace
+                                      output
+
+  @lithiumdevs/ai-inspector/openai    OpenAI-compatible integration
+
+  @lithiumdevs/ai-inspector/ai-sdk    Vercel AI SDK integration
+
+  @lithiumdevs/ai-inspector/otel      OpenTelemetry support
+  -----------------------------------------------------------------------
+
+Core API
+
+Use the core API when you want to add tracing to your own application
+code or build a custom integration.
+
+Node.js
+
+Use the Node entry point for Node.js applications and local development
+workflows. The Node preset supports writing trace records locally in
+NDJSON format.
+
+OpenAI-compatible clients
+
+Use the OpenAI integration entry point when working with a supported
+OpenAI-compatible client. Check the package documentation for setup
+details and compatibility requirements.
+
+Vercel AI SDK
+
+Use the AI SDK integration entry point to instrument supported Vercel AI
+SDK workflows. Refer to the package documentation for the exact adapter
+setup for your SDK version.
+
+OpenTelemetry
+
+Use the OpenTelemetry entry point when connecting AI Inspector with an
+OpenTelemetry-based observability workflow. Review the package
+documentation for supported exporter and transport configuration.
+
+Command-Line Interface
+
+AI Inspector includes a CLI for inspecting locally recorded traces.
+
+    npx @lithiumdevs/ai-inspector list
+
+Show a trace:
+
+    npx @lithiumdevs/ai-inspector show <trace-id>
+
+View summary statistics:
+
+    npx @lithiumdevs/ai-inspector stats
+
+You can also invoke the CLI through your package manager’s equivalent
+command runner.
+
+The CLI can only inspect trace data that is available in the configured
+local data source. If no traces have been recorded yet, the results may
+be empty.
+
+Web Workbench
+
+The repository also contains a web workbench for exploring the project.
+
+The current workbench includes a playground experience with simulated
+model responses. Treat playground output as demonstration data; it
+should not be interpreted as a live response from an external AI
+provider unless a real provider integration has been configured.
+
+Development
+
+## Clone the repository:
+
+    git clone https://github.com/notrealvansh/ai-inspector.git
+    cd ai-inspector
+
+Install dependencies using the package manager configured for the
+repository:
+
+    bun install
+
+Common development checks:
+
+    bun run typecheck
+    bun run test
+    bun run build
+
+Run the commands supported by the scripts in the relevant workspace’s
+package.json. If a script is not available at the repository root, run
+the corresponding command from the package workspace.
+
+## Repository Structure
+
+The repository is organized as a TypeScript project with the package
+implementation and supporting workbench.
+
+    ai-inspector/
+    ├── packages/
+    │   └── ai-inspector/
+    │       ├── src/
+    │       ├── package.json
+    │       └── README.md
+    ├── .github/
+    ├── package.json
+    └── README.md
+
+The exact source layout may evolve as the project develops.
+
+## Privacy
+
+AI Inspector is designed to support local-first observability workflows.
+The Node preset can write trace records to local NDJSON output.
+
+Your application is responsible for deciding what data is collected and
+where it is sent. Avoid recording passwords, API keys, access tokens,
+personal data, or other sensitive information. Configure redaction and
+sampling appropriately before using the package with real application
+traffic.
+
+Do not assume that every integration stores data in the same place.
+Review the configuration for the specific integration you use.
 
 ## Contributing
 
-Contributions, bug reports and feature requests are welcome.
+Contributions, bug reports, and suggestions are welcome.
 
-Please read the "contribution guidelines" (.github/CONTRIBUTING.md) before submitting a pull request.
+Before submitting a change:
 
-- "Report an issue" (https://github.com/notrealvansh/ai-inspector/issues)
-- "View source code" (https://github.com/notrealvansh/ai-inspector)
-- "Security policy" (.github/SECURITY.md)
-- "Code of conduct" (.github/CODE_OF_CONDUCT.md)
+1.  Check existing issues to avoid duplicates.
+2.  Describe the problem or proposed improvement clearly.
+3.  Include steps to reproduce bugs where possible.
+4.  Run the relevant tests and type checks.
+5.  Open a pull request with a concise description of the change.
 
-License
+Project guidance:
 
-Released under the MIT License.
+-   Contributing Guide
+-   Code of Conduct
+-   Security Policy
+
+If one of these files is not present in the repository, follow the
+instructions in the repository’s available contribution and security
+documentation.
+
+## Links
+
+-   npm package: https://www.npmjs.com/package/@lithiumdevs/ai-inspector
+-   GitHub repository: https://github.com/notrealvansh/ai-inspector
+-   Issue tracker: https://github.com/notrealvansh/ai-inspector/issues
+
+## License
+
+This project is released under the MIT License. See the LICENSE file for
+details.
