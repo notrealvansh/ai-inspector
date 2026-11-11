@@ -15,7 +15,7 @@ AI Inspector
   <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License">
 </p>---
 
-Overview
+## Overview
 
 AI Inspector is a lightweight observability toolkit designed for TypeScript AI applications.
 
@@ -25,7 +25,7 @@ By default, traces are stored locally in NDJSON format. OpenTelemetry export is 
 
 No hosted account is required to get started.
 
-Features
+## Features
 
 Feature| Description
 Request tracing| Record model calls, prompts and responses
@@ -39,11 +39,11 @@ Local storage| Store traces locally in NDJSON format
 OpenTelemetry| Export traces through OTLP/HTTP
 Data controls| Configure redaction, sampling and captured fields
 
-Installation
+## Installation
 
 npm install @lithiumdevs/ai-inspector
 
-Quick Start
+## Quick Start
 
 Create an inspector and record your first trace.
 
@@ -76,7 +76,7 @@ This example uses sample data to demonstrate trace creation. It does not make a 
 
 For real provider requests, use one of the available integrations.
 
-Integrations
+## Integrations
 
 AI Inspector provides separate entry points for different environments and integrations.
 
@@ -97,7 +97,7 @@ npx ai-inspector list
 npx ai-inspector show <trace-id>
 npx ai-inspector stats
 
-Web Workbench
+## Web Workbench
 
 The repository also includes a web workbench built with:
 
@@ -112,7 +112,7 @@ Note: The playground currently uses simulated model responses. It does not make 
 
 Development
 
-Requirements
+## Requirements
 
 - Bun
 - Node.js 18.17 or newer for the Node.js package
@@ -153,7 +153,7 @@ ai-inspector/
 ├── README.md
 └── package.json
 
-Contributing
+## Contributing
 
 Contributions, bug reports and feature requests are welcome.
 
