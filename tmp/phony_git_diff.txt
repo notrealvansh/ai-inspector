@@ -1,0 +1,67 @@
+diff --git a/.github/workflows/publish.yml b/.github/workflows/publish.yml
+new file mode 100644
+--- /dev/null
++++ b/.github/workflows/publish.yml
+@@ -0,0 +1,41 @@
++name: Publish AI Inspector to npm
++
++on:
++  workflow_dispatch:
++    inputs:
++      release_type:
++        description: "Release type for npm version bump"
++        required: false
++        default: "patch"
++        type: choice
++        options:
++          - patch
++          - minor
++          - major
++
++permissions:
++  contents: read
++  id-token: write
++
++jobs:
++  publish:
++    runs-on: ubuntu-latest
++
++    steps:
++      - name: Checkout repository
++        uses: actions/checkout@v4
++
++      - name: Setup Node.js
++        uses: actions/setup-node@v4
++        with:
++          node-version: 22
++          registry-url: "https://registry.npmjs.org"
++
++      - name: Install dependencies
++        run: npm ci
++
++      - name: Build package
++        working-directory: packages/ai-inspector
++        run: npm run build
++
++      - name: Run tests
++        working-directory: packages/ai-inspector
++        run: npm test
++
++      - name: Set version
++        working-directory: packages/ai-inspector
++        run: |
++          npm version ${{ github.event.inputs.release_type || 'patch' }}
++
++      - name: Publish package
++        working-directory: packages/ai-inspector
++        run: npm publish --access public
+diff --git a/packages/ai-inspector/package.json b/packages/ai-inspector/package.json
+index 0000000..0000000
+--- a/packages/ai-inspector/package.json
++++ b/packages/ai-inspector/package.json
+@@ version-related changes above ====
+diff --git a/README.md b/README.md
+index 0000000..0000000
+--- a/README.md
++++ b/README.md
+@@ repository/url changes above ====
