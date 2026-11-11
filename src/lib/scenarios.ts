@@ -332,12 +332,12 @@ const streamingChat: Scenario = {
 
         const text =
           "Trace sampling keeps a representative slice of traffic instead of recording every request. Use a low rate in production, keep every error, and raise it temporarily when you are debugging a regression.";
+        generation.addEvent("stream.completed");
         generation.end({
           output: text,
           usage: { inputTokens: 1_120, outputTokens: 268 },
           attributes: { "stream.transport": "sse" },
         });
-        generation.addEvent("stream.completed");
         return text;
       },
     );

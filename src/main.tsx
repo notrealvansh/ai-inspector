@@ -12,7 +12,10 @@ import "./index.css";
 // Lazy load route components for better code splitting
 const Landing = lazy(() => import("./pages/Landing.tsx"));
 const AuthPage = lazy(() => import("./pages/Auth.tsx"));
-const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
+const DashboardLayout = lazy(() => import("./pages/Dashboard.tsx"));
+const Overview = lazy(() => import("./pages/dashboard/Overview.tsx"));
+const Traces = lazy(() => import("./pages/dashboard/Traces.tsx"));
+const Playground = lazy(() => import("./pages/dashboard/Playground.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 // Simple loading fallback for route transitions
@@ -127,11 +130,18 @@ createRoot(document.getElementById("root")!).render(
               <Route
                 path="/dashboard"
                 element={
-                  <RequireAuth>
-                    <Dashboard />
+                  <RequireAuth
+                    title="Sign in to open the workbench"
+                    description="Saved traces and the trace playground live here."
+                  >
+                    <DashboardLayout />
                   </RequireAuth>
                 }
-              />
+              >
+                <Route index element={<Overview />} />
+                <Route path="traces" element={<Traces />} />
+                <Route path="playground" element={<Playground />} />
+              </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

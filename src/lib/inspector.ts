@@ -9,6 +9,7 @@ export {
 
 export type {
   EvaluationResult,
+  StartTraceOptions,
   SpanData,
   SpanHandle,
   SpanKind,

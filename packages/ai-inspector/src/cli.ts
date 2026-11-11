@@ -140,14 +140,11 @@ function percentile(values: number[], ratio: number): number | undefined {
 export function formatStats(traces: TraceData[]): string {
   if (traces.length === 0) return "No traces found.";
   const errors = traces.filter((trace) => trace.status === "error").length;
-  const duration = percentile(
-    traces.map((trace) => trace.durationMs ?? 0),
-    0.5,
+  const durations = traces.flatMap((trace) =>
+    trace.durationMs === undefined ? [] : [trace.durationMs],
   );
-  const p95 = percentile(
-    traces.map((trace) => trace.durationMs ?? 0),
-    0.95,
-  );
+  const duration = percentile(durations, 0.5);
+  const p95 = percentile(durations, 0.95);
   const spans = traces.reduce((total, trace) => total + trace.spans.length, 0);
   const inputTokens = traces.reduce(
     (total, trace) => total + (trace.usage?.inputTokens ?? 0),
@@ -157,14 +154,22 @@ export function formatStats(traces: TraceData[]): string {
     (total, trace) => total + (trace.usage?.outputTokens ?? 0),
     0,
   );
+  const usageCount = traces.filter(
+    (trace) =>
+      trace.usage?.inputTokens !== undefined ||
+      trace.usage?.outputTokens !== undefined,
+  ).length;
+  const costCount = traces.filter((trace) => trace.cost).length;
   const cost = traces.reduce((total, trace) => total + (trace.cost?.totalUsd ?? 0), 0);
+  const partial = (reported: number) =>
+    reported < traces.length ? ` (${reported}/${traces.length} traces)` : "";
   const lines = [
     `traces      ${traces.length}`,
     `errors      ${errors} (${((errors / traces.length) * 100).toFixed(1)}%)`,
     `spans       ${spans}`,
-    `tokens      ${inputTokens} in / ${outputTokens} out`,
-    `cost        ${cost > 0 ? formatCost(cost) : "-"}`,
-    `duration    p50 ${formatDuration(duration)} · p95 ${formatDuration(p95)}`,
+    `tokens      ${usageCount > 0 ? `${inputTokens} in / ${outputTokens} out${partial(usageCount)}` : "not reported"}`,
+    `cost        ${costCount > 0 ? `${formatCost(cost)}${partial(costCount)}` : "not reported"}`,
+    `duration    ${durations.length > 0 ? `p50 ${formatDuration(duration)} · p95 ${formatDuration(p95)}${partial(durations.length)}` : "not reported"}`,
   ];
   return lines.join("\n");
 }

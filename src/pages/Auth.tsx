@@ -14,8 +14,8 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
+import { Brand } from "@/components/Brand";
 import { useAuth } from "@/hooks/use-auth";
-import logo from "@/assets/logo.svg";
 import { ArrowRight, Loader2, Mail, UserX } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
@@ -79,60 +79,51 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
     try {
       const formData = new FormData(event.currentTarget);
       await signIn("email-otp", formData);
-
-      console.log("signed in");
-
       navigate(redirect);
     } catch (error) {
       console.error("OTP verification error:", error);
-
       setError("The verification code you entered is incorrect.");
       setIsLoading(false);
-
       setOtp("");
     }
+  };
+
+  const backToEmail = () => {
+    setStep("signIn");
+    setError(null);
+    setOtp("");
   };
 
   const handleGuestLogin = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      console.log("Attempting anonymous sign in...");
       await signIn("anonymous");
-      console.log("Anonymous sign in successful");
       navigate(redirect);
     } catch (error) {
-      console.error("Guest login error:", error);
-      console.error("Error details:", JSON.stringify(error, null, 2));
-      setError(`Failed to sign in as guest: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setError(
+        `Failed to sign in as guest: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-
-      
-      {/* Auth Content */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="flex items-center justify-center h-full flex-col">
-        <Card className="min-w-[350px] pb-0 border shadow-md">
+    <div className="min-h-screen flex flex-col bg-grid">
+      <div className="flex-1 flex items-center justify-center px-4 py-10">
+        <div className="flex w-full max-w-sm flex-col items-center">
+          <div className="mb-6">
+            <Brand showVersion />
+          </div>
+        <Card className="w-full border-border bg-card pb-0 shadow-none">
           {step === "signIn" ? (
             <>
               <CardHeader className="text-center">
-              <div className="flex justify-center">
-                    <img
-                      src={logo}
-                      alt="Lock Icon"
-                      width={64}
-                      height={64}
-                      className="rounded-lg mb-4 mt-4 cursor-pointer"
-                      onClick={() => navigate("/")}
-                    />
-                  </div>
-                <CardTitle className="text-xl">Get Started</CardTitle>
+                <CardTitle className="text-xl tracking-tight">
+                  Sign in to the workbench
+                </CardTitle>
                 <CardDescription>
-                  Enter your email to log in or sign up
+                  Use an email code to save sample traces. No password.
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleEmailSubmit}>
@@ -164,7 +155,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     </Button>
                   </div>
                   {error && (
-                    <p className="mt-2 text-sm text-red-500">{error}</p>
+                    <p className="mt-2 text-sm text-destructive">{error}</p>
                   )}
                   
                   <div className="mt-4">
@@ -182,12 +173,12 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     <Button
                       type="button"
                       variant="outline"
-                      className="w-full mt-4"
+                      className="w-full mt-4 gap-2"
                       onClick={handleGuestLogin}
                       disabled={isLoading}
                     >
-                      <UserX className="mr-2 h-4 w-4" />
-                      Continue as Guest
+                      <UserX className="h-4 w-4" />
+                      Continue as guest
                     </Button>
                   </div>
                 </CardContent>
@@ -230,16 +221,17 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     </InputOTP>
                   </div>
                   {error && (
-                    <p className="mt-2 text-sm text-red-500 text-center">
+                    <p className="mt-2 text-sm text-destructive text-center">
                       {error}
                     </p>
                   )}
                   <p className="text-sm text-muted-foreground text-center mt-4">
                     Didn't receive a code?{" "}
                     <Button
+                      type="button"
                       variant="link"
                       className="p-0 h-auto"
-                      onClick={() => setStep("signIn")}
+                      onClick={backToEmail}
                     >
                       Try again
                     </Button>
@@ -266,7 +258,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                   <Button
                     type="button"
                     variant="ghost"
-                    onClick={() => setStep("signIn")}
+                    onClick={backToEmail}
                     disabled={isLoading}
                     className="w-full"
                   >
@@ -277,16 +269,9 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             </>
           )}
 
-          <div className="py-4 px-6 text-xs text-center text-muted-foreground bg-muted border-t rounded-b-lg">
-            Secured by{" "}
-            <a
-              href="https://freebuff.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-primary transition-colors"
-            >
-              freebuff.com
-            </a>
+          <div className="rounded-b-lg border-t border-border bg-muted px-6 py-4 text-center text-[11px] leading-5 text-muted-foreground">
+            Workbench data is private to your account. Local traces written by
+            the package never leave your machine.
           </div>
         </Card>
         </div>

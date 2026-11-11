@@ -79,6 +79,7 @@ Pass the SDK functions you want observed. The wrapper does not modify the SDK an
 
 ```ts
 import { generateText, streamText } from "ai";
+import { openai } from "@ai-sdk/openai";
 import { createNodeInspector } from "@yourname/ai-inspector/node";
 import { instrumentAiSdk } from "@yourname/ai-inspector/ai-sdk";
 
@@ -182,7 +183,7 @@ Modes:
 | `preview` | Truncated and redacted | Kept |
 | `full` | Kept, secret keys still redacted | Kept |
 
-Metadata you attach to a trace is sanitized but not dropped in `metadata` mode. Token counts and costs are never estimated. If a provider does not report a value, the field is absent.
+Metadata you attach to a trace is sanitized but not dropped in `metadata` mode. Token counts are never estimated; if a provider does not report one, the field is absent. Costs are estimates from the pricing table, not provider invoices.
 
 Sampling uses `sampleRate` from 0 to 1. Non-sampled traces still execute normally but are not exported.
 
@@ -233,6 +234,7 @@ Wrap an evaluation in `inspector.trace` to attach it to an application trace. Ca
 Export the same traces to any OTLP/HTTP collector. Trace and span ids are W3C/OpenTelemetry compatible, and generation spans carry `gen_ai.*` attributes.
 
 ```ts
+import { createNodeInspector } from "@yourname/ai-inspector/node";
 import { otlpHttpExporter } from "@yourname/ai-inspector/otel";
 
 const inspector = createNodeInspector({
@@ -256,12 +258,14 @@ The package does not bundle the OpenTelemetry SDK. It emits OTLP directly, which
 Local traces are readable without this package's dashboard:
 
 ```bash
-npx ai-inspector list
-npx ai-inspector show last
-npx ai-inspector show 4f2a1c0b --json
-npx ai-inspector stats
-npx ai-inspector clear --yes
+npx @yourname/ai-inspector list
+npx @yourname/ai-inspector show last
+npx @yourname/ai-inspector show 4f2a1c0b --json
+npx @yourname/ai-inspector stats
+npx @yourname/ai-inspector clear --yes
 ```
+
+Once installed, the binary is available as `ai-inspector`.
 
 The default file is `.ai-inspector/traces.ndjson`. Override it with `--file path` or `AI_INSPECTOR_FILE`.
 

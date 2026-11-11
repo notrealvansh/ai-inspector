@@ -1,6 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 
+import type { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 
 const MAX_TRACES_PER_USER = 40;
@@ -17,7 +18,7 @@ interface StoredTrace {
 }
 
 function summarize(trace: {
-  _id: string;
+  _id: Id<"traces">;
   name: string;
   scenario: string;
   status: "ok" | "error" | "running";

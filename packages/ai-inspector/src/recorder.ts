@@ -489,7 +489,7 @@ function aggregateUsageAndCost(spans: SpanData[]): {
 
   return {
     ...(Object.keys(usage).length > 0 ? { usage } : {}),
-    ...(hasAllCost && totalUsd > 0
+    ...(hasAllCost
       ? {
           cost: {
             inputUsd,

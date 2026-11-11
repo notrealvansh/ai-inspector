@@ -1,14 +1,18 @@
 {
-  "name": "vite-template",
+  "name": "ai-inspector-workbench",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Docs and trace workbench for @yourname/ai-inspector",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "inspector:test": "vitest run --root packages/ai-inspector",
+    "inspector:typecheck": "tsc -p packages/ai-inspector/tsconfig.json --noEmit",
+    "inspector:build": "cd packages/ai-inspector && tsup"
   },
   "dependencies": {
     "@convex-dev/auth": "^0.0.90",
