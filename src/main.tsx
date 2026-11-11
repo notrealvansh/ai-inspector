@@ -1,6 +1,4 @@
 import '@vly-ai/integrations';
-import { vlyIntegrations } from './lib/vly-integrations';
-void vlyIntegrations; // use the managed platform integration if the env is present
 import { Toaster } from "@/components/ui/sonner";
 import { RequireAuth } from "@/components/RequireAuth";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
