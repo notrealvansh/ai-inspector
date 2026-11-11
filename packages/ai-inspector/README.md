@@ -4,7 +4,7 @@ Traces for TypeScript AI applications. Record model calls, prompts, responses, t
 
 Package: `@lithiumdevs/ai-inspector`.
 
-Source: https://github.com/lithiumdevs/ai-inspector
+Source: https://github.com/notrealvansh/ai-inspector
 
 - Framework-agnostic core with no runtime dependencies
 - Node preset writes newline-delimited JSON locally, no account or API key
@@ -310,19 +310,23 @@ bun run build
 
 The test suite covers trace lifecycles, async context isolation, capture redaction, pricing, exports, evals, adapters, streaming, and OTLP mapping.
 
+## Contributing
+
+See the repository CONTRIBUTING guide. The repository also includes a code of conduct and a security policy.
+
+## Repository
+
+Issues and source are on GitHub:
+
+- Source: https://github.com/notrealvansh/ai-inspector
+- Issues: https://github.com/notrealvansh/ai-inspector/issues
+
+The repository includes GitHub collaboration files for the package: CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, issue templates, a pull request template, and a CI workflow that typechecks, tests, builds, and validates the package.
+
 ## Publishing
 
 This package is published as `@lithiumdevs/ai-inspector` on npm. The release
 commands are run from the package directory:
-
-```bash
-cd packages/ai-inspector
-npm version patch  # or minor / major
-npm publish
-```
-
-The `prepublishOnly` script builds and tests before publishing.
-
 
 ```bash
 cd packages/ai-inspector

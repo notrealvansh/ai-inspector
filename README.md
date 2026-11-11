@@ -6,7 +6,7 @@ The package records model calls, prompts and responses, token usage, latency, ti
 
 Package: `@lithiumdevs/ai-inspector`.
 
-Source: https://github.com/lithiumdevs/ai-inspector
+Source: https://github.com/notrealvansh/ai-inspector
 
 ## Repository layout
 
@@ -63,6 +63,15 @@ bun tsc -b --noEmit
 ```
 
 Authentication uses Convex Auth with email codes and guest sign-in. Email delivery needs `AUTH_EMAIL_GATEWAY_URL` and `AUTH_EMAIL_GATEWAY_KEY` configured on the Convex deployment; the hosted preview supplies equivalent deployment settings. Provider secrets belong in Convex environment variables, not the Vite app.
+
+## Repository
+
+Source and issues are on GitHub:
+
+- Source: https://github.com/notrealvansh/ai-inspector
+- Issues: https://github.com/notrealvansh/ai-inspector/issues
+
+The repo includes GitHub collaboration files for the package: a contribution guide, code of conduct, security policy, issue templates, a pull request template, and a continuous integration workflow that typechecks, tests, builds, and validates the package.
 
 ## Verification
 

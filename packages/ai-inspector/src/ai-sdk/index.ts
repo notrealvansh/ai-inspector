@@ -438,17 +438,116 @@ export function wrapStreamText<TArgs, TResult>(
 }
 
 export interface AiSdkModule {
-  generateText?: (...args: never[]) => unknown;
-  streamText?: (...args: never[]) => unknown;
-  generateObject?: (...args: never[]) => unknown;
-  embed?: (...args: never[]) => unknown;
-  embedMany?: (...args: never[]) => unknown;
+  generateText?: AiSdkGenerateTextFn;
+  streamText?: AiSdkStreamTextFn;
+  generateObject?: AiSdkGenerateObjectFn;
+  embed?: AiSdkEmbedFn;
+  embedMany?: AiSdkEmbedManyFn;
+  [key: string]: unknown;
+}
+
+export type AiSdkGenerateTextFn = (
+  args: AiSdkGenerateTextArgs,
+) => Promise<AiSdkGenerateTextResult>;
+export type AiSdkStreamTextFn = (
+  args: AiSdkGenerateTextArgs,
+) => AiSdkStreamTextResult;
+export type AiSdkGenerateObjectFn = (
+  args: AiSdkGenerateObjectArgs,
+) => Promise<AiSdkGenerateObjectResult>;
+export type AiSdkEmbedFn = (
+  args: AiSdkEmbedArgs,
+) => Promise<AiSdkEmbedResult>;
+export type AiSdkEmbedManyFn = (
+  args: AiSdkEmbedManyArgs,
+) => Promise<AiSdkEmbedManyResult>;
+
+export interface AiSdkGenerateTextArgs {
+  model: unknown;
+  prompt: string;
+  tools?: unknown[];
+  maxTokens?: number;
+  temperature?: number;
+  [key: string]: unknown;
+}
+
+export interface AiSdkGenerateTextResult {
+  text?: string;
+  object?: unknown;
+  toolCalls?: Array<{
+    toolName?: string;
+    toolCallId?: string;
+    input?: unknown;
+    args?: unknown;
+  }>;
+  toolResults?: Array<{
+    toolCallId?: string;
+    output?: unknown;
+    result?: unknown;
+  }>;
+  usage?: unknown;
+  response?: {
+    modelId?: string;
+  };
+  finishReason?: string;
+  [key: string]: unknown;
+}
+
+export interface AiSdkStreamTextResult {
+  textStream?: AsyncIterable<string | unknown>;
+  fullStream?: AsyncIterable<unknown>;
+  consumeStream?: () => Promise<unknown>;
+  text?: string | Promise<string>;
+  usage?: unknown | Promise<unknown>;
+  response?: unknown | Promise<unknown>;
+  [key: string]: unknown;
+}
+
+export interface AiSdkGenerateObjectArgs {
+  model: unknown;
+  schema: unknown;
+  prompt?: string;
+  [key: string]: unknown;
+}
+
+export interface AiSdkGenerateObjectResult {
+  object?: unknown;
+  usage?: unknown;
+  response?: {
+    modelId?: string;
+  };
+  [key: string]: unknown;
+}
+
+export interface AiSdkEmbedArgs {
+  model: unknown;
+  value: string | unknown[];
+  [key: string]: unknown;
+}
+
+export interface AiSdkEmbedResult {
+  embeddings?: unknown[];
+  usage?: unknown;
+  [key: string]: unknown;
+}
+
+export interface AiSdkEmbedManyArgs {
+  model: unknown;
+  values: (string | unknown[])[];
+  [key: string]: unknown;
+}
+
+export interface AiSdkEmbedManyResult {
+  embeddings?: unknown[];
+  usage?: unknown;
   [key: string]: unknown;
 }
 
 /**
  * Returns wrapped versions of the AI SDK functions you pass in. Nothing is
- * installed globally, and the returned object keeps the original typings.
+ * installed globally. The SDK functions you pass in are typed as broadly as
+ * possible because their public API surface is not part of this package's
+ * contract.
  */
 export function instrumentAiSdk<T extends AiSdkModule>(
   inspector: Inspector,
@@ -459,37 +558,37 @@ export function instrumentAiSdk<T extends AiSdkModule>(
   if (typeof sdk.generateText === "function") {
     output.generateText = wrapGenerateText(
       inspector,
-      sdk.generateText as (args: unknown) => Promise<unknown>,
+      sdk.generateText as AiSdkGenerateTextFn,
       options,
-    );
+    ) as T["generateText"];
   }
   if (typeof sdk.streamText === "function") {
     output.streamText = wrapStreamText(
       inspector,
-      sdk.streamText as (args: unknown) => unknown,
+      sdk.streamText as AiSdkStreamTextFn,
       options,
-    );
+    ) as T["streamText"];
   }
   if (typeof sdk.generateObject === "function") {
     output.generateObject = wrapGenerateObject(
       inspector,
-      sdk.generateObject as (args: unknown) => Promise<unknown>,
+      sdk.generateObject as AiSdkGenerateObjectFn,
       options,
-    );
+    ) as T["generateObject"];
   }
   if (typeof sdk.embed === "function") {
     output.embed = wrapEmbed(
       inspector,
-      sdk.embed as (args: unknown) => Promise<unknown>,
+      sdk.embed as AiSdkEmbedFn,
       options,
-    );
+    ) as T["embed"];
   }
   if (typeof sdk.embedMany === "function") {
     output.embedMany = wrapEmbedMany(
       inspector,
-      sdk.embedMany as (args: unknown) => Promise<unknown>,
+      sdk.embedMany as AiSdkEmbedManyFn,
       options,
-    );
+    ) as T["embedMany"];
   }
   return output as T;
 }
