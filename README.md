@@ -1,103 +1,135 @@
-# AI Inspector
+AI Inspector
 
-Local-first traces for TypeScript AI applications, plus a workbench for reading them.
+A lightweight observability toolkit for TypeScript AI applications.
 
-The package records model calls, prompts and responses, token usage, latency, time to first token, tool calls, errors, estimated costs, and evaluation scores. It writes to a local NDJSON file by default, with optional OpenTelemetry export. No hosted service or API key is required.
+AI Inspector helps you inspect what's happening inside your AI application. It records model requests, responses, token usage, latency, tool calls and errors, making it easier to understand and debug your application.
 
-Package: `@lithiumdevs/ai-inspector`.
+Traces are stored locally in NDJSON format by default. OpenTelemetry export is also supported.
 
-Source: https://github.com/notrealvansh/ai-inspector
+No hosted account or API key is needed to get started.
 
-## Repository layout
+Package: ""@lithiumdevs/ai-inspector"" (https://www.npmjs.com/package/@lithiumdevs/ai-inspector)
 
-```
-packages/ai-inspector/   publishable package (core, Node, OTLP, AI SDK, OpenAI, CLI)
-src/                     docs site and signed-in trace workbench
-src/convex/              Convex schema and trace storage
-```
+Features
 
-The workbench is a Vite, React, and Convex app. It runs sample scenarios through the real inspector core in the browser, then saves the resulting trace for inspection. The sample model responses are simulated and labeled as such in the UI. No provider keys are used for the demo scenarios.
+- Request tracing — Record model calls, prompts and responses.
+- Token tracking — Capture input and output token usage.
+- Latency monitoring — Measure request duration and time to first token.
+- Tool tracking — Inspect tool calls and their results.
+- Error recording — Keep track of failed requests and execution errors.
+- Cost estimation — Estimate usage costs using configured model pricing.
+- Evaluation support — Run scorers and record evaluation results.
+- Local storage — Save traces to an NDJSON file.
+- OpenTelemetry — Export traces using OTLP/HTTP.
+- Data controls — Configure redaction, sampling and what gets captured.
 
-## Package
+Installation
 
-```bash
-cd packages/ai-inspector
+npm install @lithiumdevs/ai-inspector
+
+Quick start
+
+Create an inspector and record your first trace:
+
+import { createNodeInspector } from "@lithiumdevs/ai-inspector/node";
+
+const inspector = createNodeInspector({
+  serviceName: "my-ai-app",
+});
+
+await inspector.trace("example-request", async (trace) => {
+  const generation = trace.generation({
+    name: "chat-completion",
+    model: "example-model",
+    provider: "custom",
+  });
+
+  generation.end({
+    output: "Hello from my application",
+    usage: {
+      inputTokens: 10,
+      outputTokens: 5,
+    },
+  });
+});
+
+await inspector.flush();
+await inspector.shutdown();
+
+This example records a generation with sample data. Connect an actual model provider or use one of the available integrations to trace real requests.
+
+Integrations
+
+AI Inspector includes separate entry points for different environments and providers.
+
+Package entry point| Purpose
+"@lithiumdevs/ai-inspector"| Core tracing API
+"@lithiumdevs/ai-inspector/node"| Node.js preset and local exporter
+"@lithiumdevs/ai-inspector/ai-sdk"| Vercel AI SDK integration
+"@lithiumdevs/ai-inspector/openai"| OpenAI-compatible client integration
+"@lithiumdevs/ai-inspector/otel"| OTLP/HTTP exporter
+
+Command line
+
+The CLI lets you inspect locally recorded traces.
+
+npx ai-inspector list
+npx ai-inspector show <trace-id>
+npx ai-inspector stats
+
+Repository structure
+
+ai-inspector/
+├── packages/
+│   └── ai-inspector/   Published npm package
+├── src/
+│   ├── docs and workbench
+│   └── convex/         Backend and trace storage
+└── README.md
+
+The repository also includes a web workbench built with Vite, React and Convex.
+
+It provides a dashboard for viewing traces and inspecting individual spans. The playground uses sample scenarios with simulated model responses; it does not make real provider requests.
+
+Development
+
+Requirements:
+
+- Bun
+- Node.js 18.17 or newer for the Node package
+
+Install dependencies:
+
 bun install
+
+Run the package checks:
+
+cd packages/ai-inspector
 bun run typecheck
 bun run test
 bun run build
-```
 
-Entry points:
+Start the workbench:
 
-- `@lithiumdevs/ai-inspector` core
-- `@lithiumdevs/ai-inspector/node` Node preset and JSONL exporter
-- `@lithiumdevs/ai-inspector/ai-sdk` Vercel AI SDK wrappers
-- `@lithiumdevs/ai-inspector/openai` OpenAI-compatible client proxy
-- `@lithiumdevs/ai-inspector/otel` OTLP/HTTP exporter
-
-Full package documentation is in [`packages/ai-inspector/README.md`](packages/ai-inspector/README.md).
-
-Publishing is covered in that README.
-
-## Workbench
-
-Routes:
-
-- `/` landing page and package documentation
-- `/auth` email-code and guest sign-in
-- `/dashboard` saved trace overview
-- `/dashboard/traces` trace list and span inspector
-- `/dashboard/playground` sample scenario runner
-
-```bash
-bun install
 bun run dev
-```
 
-Convex types and schema are managed by Convex. After changing `src/convex/`, regenerate types with:
+The workbench requires a configured Convex deployment. Set "VITE_CONVEX_URL" and configure the required backend environment variables before using authenticated features.
 
-```bash
-bun convex dev --once
-bun tsc -b --noEmit
-```
+Configuration and documentation
 
-Authentication uses Convex Auth with email codes and guest sign-in. Email delivery needs `AUTH_EMAIL_GATEWAY_URL` and `AUTH_EMAIL_GATEWAY_KEY` configured on the Convex deployment; the hosted preview supplies equivalent deployment settings. Provider secrets belong in Convex environment variables, not the Vite app.
+For complete setup instructions, API references, integration examples and publishing instructions, see:
 
-## Repository
+""packages/ai-inspector/README.md"" (packages/ai-inspector/README.md)
 
-Source and issues are on GitHub:
+Contributing
 
-- Source: https://github.com/notrealvansh/ai-inspector
-- Issues: https://github.com/notrealvansh/ai-inspector/issues
+Contributions, bug reports and feature requests are welcome.
 
-The repo includes GitHub collaboration files for the package: a contribution guide, code of conduct, security policy, issue templates, a pull request template, and a continuous integration workflow that typechecks, tests, builds, and validates the package.
+Please read the contribution guidelines before submitting a pull request.
 
-## Verification
+- "Open an issue" (https://github.com/notrealvansh/ai-inspector/issues)
+- "View the source" (https://github.com/notrealvansh/ai-inspector)
 
-```bash
-bun tsc -b --noEmit
-bun run inspector:typecheck
-bun run inspector:test
-```
+License
 
-The package test suite covers trace lifecycles, async context isolation, capture and redaction, pricing, exporter failure handling, evals, AI SDK and OpenAI adapters, streaming, and OTLP mapping.
-
-## Publishing
-
-Publishing is covered in `packages/ai-inspector/README.md` under Publishing.
-
-```bash
-cd packages/ai-inspector
-npm login
-npm run typecheck
-npm test
-npm run build
-npm publish --access public
-```
-
-For later releases, run `npm version patch` (or `minor`/`major`) before `npm publish`. To deploy the workbench, run `bun run build` and serve the `dist` directory from a static host with `VITE_CONVEX_URL` set to the production Convex URL. Deploy the backend with `bunx convex deploy` and configure its environment variables in the Convex dashboard.
-
-## License
-
-MIT
+This project is released under the MIT License.
