@@ -2,7 +2,7 @@
 
 Traces for TypeScript AI applications. Record model calls, prompts, responses, token usage, latency, time to first token, tool calls, errors, estimated cost, and evaluation scores. Traces stay on your machine unless you add an exporter.
 
-The name is a placeholder until the npm scope is confirmed.
+Scope: `@inspectordotai/ai-inspector` is a placeholder until the npm scope is confirmed.
 
 - Framework-agnostic core with no runtime dependencies
 - Node preset writes newline-delimited JSON locally, no account or API key
@@ -25,7 +25,7 @@ npm install @inspectordotai/ai-inspector
 
 ## Quick start
 
-The Node preset uses `AsyncLocalStorage` for context propagation and writes one JSON object per trace to `.ai-inspector/traces.ndjson`.
+The Node preset writes newline-delimited JSON by default. Install the package, start a trace, and look at what landed.e preset uses `AsyncLocalStorage` for context propagation and writes one JSON object per trace to `.ai-inspector/traces.ndjson`.
 
 ```ts
 import { createNodeInspector } from "@inspectordotai/ai-inspector/node";

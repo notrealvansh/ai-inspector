@@ -2,7 +2,7 @@
   "name": "ai-inspector-workbench",
   "private": true,
   "version": "0.1.0",
-  "description": "Docs and trace workbench for @yourname/ai-inspector",
+  "description": "Docs and trace workbench for the AI Inspector package and demo app.",
   "type": "module",
   "scripts": {
     "dev": "vite",

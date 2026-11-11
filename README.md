@@ -72,7 +72,7 @@ The package test suite covers trace lifecycles, async context isolation, capture
 
 ## Publishing
 
-The npm scope in `packages/ai-inspector/package.json` is a placeholder. Replace `@yourname/ai-inspector` with an available name, add your `repository`, `homepage`, and `bugs` URLs, then publish from the package directory:
+The npm name in `packages/ai-inspector/package.json` is a placeholder. Replace `@inspectordotai/ai-inspector` with the name you control, add your `repository`, `homepage`, and `bugs` URLs, then publish from the package directory:
 
 ```bash
 cd packages/ai-inspector
