@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Local-first traces for TypeScript AI apps: model calls, tokens, latency, tools, costs, and evals.",
   "license": "MIT",
-  "author": "Inspectordotai",
+  "author": "lithiumdevs",
   "type": "module",
   "sideEffects": false,
   "engines": {
