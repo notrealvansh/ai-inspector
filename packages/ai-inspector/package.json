@@ -1,5 +1,5 @@
 {
-  "name": "@inspectordotai/ai-inspector",
+  "name": "@lithiumdevs/ai-inspector",
   "version": "0.1.0",
   "description": "Local-first traces for TypeScript AI apps: model calls, tokens, latency, tools, costs, and evals.",
   "license": "MIT",

@@ -53,7 +53,7 @@ describe("OTLP export", () => {
     const trace = sampleTrace();
     const payload = traceToOtlp(trace, { serviceName: "checkout-api" });
     const scope = payload.resourceSpans[0].scopeSpans[0];
-    expect(scope.scope.name).toBe("@inspectordotai/ai-inspector");
+    expect(scope.scope.name).toBe("@lithiumdevs/ai-inspector");
     expect(scope.spans).toHaveLength(2);
 
     const root = scope.spans[0];

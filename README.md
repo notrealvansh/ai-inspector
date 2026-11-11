@@ -4,7 +4,7 @@ Local-first traces for TypeScript AI applications, plus a workbench for reading 
 
 The package records model calls, prompts and responses, token usage, latency, time to first token, tool calls, errors, estimated costs, and evaluation scores. It writes to a local NDJSON file by default, with optional OpenTelemetry export. No hosted service or API key is required.
 
-Scope: `@inspectordotai/ai-inspector` (placeholder until you claim your own, see Publishing).
+Scope: `@lithiumdevs/ai-inspector`. Use this until you claim your own npm scope.
 
 ## Repository layout
 
@@ -28,11 +28,11 @@ bun run build
 
 Entry points:
 
-- `@inspectordotai/ai-inspector` core
-- `@inspectordotai/ai-inspector/node` Node preset and JSONL exporter
-- `@inspectordotai/ai-inspector/ai-sdk` Vercel AI SDK wrappers
-- `@inspectordotai/ai-inspector/openai` OpenAI-compatible client proxy
-- `@inspectordotai/ai-inspector/otel` OTLP/HTTP exporter
+- `@lithiumdevs/ai-inspector` core
+- `@lithiumdevs/ai-inspector/node` Node preset and JSONL exporter
+- `@lithiumdevs/ai-inspector/ai-sdk` Vercel AI SDK wrappers
+- `@lithiumdevs/ai-inspector/openai` OpenAI-compatible client proxy
+- `@lithiumdevs/ai-inspector/otel` OTLP/HTTP exporter
 
 Full package documentation is in [`packages/ai-inspector/README.md`](packages/ai-inspector/README.md).
 
@@ -72,7 +72,7 @@ The package test suite covers trace lifecycles, async context isolation, capture
 
 ## Publishing
 
-The npm name in `packages/ai-inspector/package.json` is a placeholder. Replace `@inspectordotai/ai-inspector` with the name you control, add your `repository`, `homepage`, and `bugs` URLs, then publish from the package directory:
+The npm name in `packages/ai-inspector/package.json` is a placeholder. Replace `@lithiumdevs/ai-inspector` with the name you control, add your `repository`, `homepage`, and `bugs` URLs, then publish from the package directory:
 
 ```bash
 cd packages/ai-inspector
