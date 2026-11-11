@@ -182,7 +182,7 @@ export default function Playground() {
           <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
             Each scenario calls the real{" "}
             <span className="font-mono text-[12px] text-foreground/80">
-              @yourname/ai-inspector
+              @inspectordotai/ai-inspector
             </span>{" "}
             core in your browser. Model responses are simulated; timings, spans,
             token counts, pricing, and scores follow the package output.

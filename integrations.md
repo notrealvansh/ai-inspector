@@ -1,33 +1,47 @@
-# VLY Integrations
+<!--
+This file is part of the hosted workspace tooling. It documents the managed
+integrations that the preview environment can use; the app itself does not
+depend on them for the demo scenarios.
+-->
 
-First-order integrations for AI, email, and payments with automatic usage billing through VLY integration keys.
+# Hosted workspace integrations
 
-## Environment Variables
+This project is built on a hosted Vite + Convex environment. That environment
+offers optional platform integrations for AI, email, and payments, configured
+through keys set on the deployment. They are optional and are not required for
+the AI Inspector workbench or the demo scenarios.
 
-The following environment variables are automatically set during project creation:
+## Environment variables
 
-- `VLY_INTEGRATION_KEY`: Your unique integration key (format: `sk_*`)
-- `VLY_INTEGRATION_BASE_URL`: The base URL for the integration gateway (default: `https://integrations.vly.ai/`)
+The hosted environment may set these automatically. You do not need to set them
+for the demo.
 
-## Installation
+- `VLY_INTEGRATION_KEY`
+- `VLY_INTEGRATION_BASE_URL` (defaults to a platform gateway)
 
-The `@vly-ai/integrations` package is already included in package.json.
+## About AI providers
 
-**Alternative AI Providers:** While you can use OpenAI, OpenRouter, or other AI providers directly with your own API keys, @vly-ai/integrations is simpler as it works out-of-the-box without requiring you to supply and manage API keys.
+You can call AI providers directly with your own keys. The platform also offers
+an integrations layer that is simpler for some hosted-use cases, but it is not
+used by the trace inspector package.
 
-## Usage in Convex Actions
+## Convex actions
+
+If you add server actions, you can call integrations from a `"use node"` file.
 
 ```typescript
 "use node";
 
-import { vly } from '../lib/vly-integrations';
 import { action } from "./_generated/server";
 
-export const generateAIResponse = action({
-  handler: async (ctx, args) => {
-    // AI Completions
-    const completion = await vly.ai.completion({
-      model: 'gpt-4o-mini',
+\export const textResponse = action({
+  handler: async () => {
+    // Replace this stub with your own provider when you wire keys.
+    return "connect a model yourself";
+  },
+});
+
+
       messages: [
         { role: 'system', content: 'You are a helpful assistant.' },
         { role: 'user', content: 'Hello!' }

@@ -199,13 +199,13 @@ export default function Overview() {
               type="button"
               onClick={() => {
                 navigator.clipboard
-                  .writeText("npm i @yourname/ai-inspector")
+                  .writeText("npm i @inspectordotai/ai-inspector")
                   .then(() => toast("Install command copied"))
                   .catch(() => toast.error("Could not copy"));
               }}
               className="mt-3 flex w-full items-center justify-between rounded-md border border-border bg-background px-2.5 py-2 font-mono text-[10px] text-foreground/80 hover:border-primary/30"
             >
-              <span className="truncate">npm i @yourname/ai-inspector</span>
+              <span className="truncate">npm i @inspectordotai/ai-inspector</span>
               <Terminal className="size-3 text-muted-foreground" />
             </button>
             <pre className="mt-2 overflow-hidden rounded-md border border-border bg-background p-2.5 font-mono text-[9.5px] leading-5 text-muted-foreground">

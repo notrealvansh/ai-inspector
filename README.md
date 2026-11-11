@@ -2,9 +2,9 @@
 
 Local-first traces for TypeScript AI applications, plus a workbench for reading them.
 
-The package records model calls, prompts and responses, token usage, latency, time to first token, tool calls, errors, estimated costs, and evaluation scores. It writes to a local NDJSON file by default. No hosted service or API key is required.
+The package records model calls, prompts and responses, token usage, latency, time to first token, tool calls, errors, estimated costs, and evaluation scores. It writes to a local NDJSON file by default, with optional OpenTelemetry export. No hosted service or API key is required.
 
-`@yourname/ai-inspector` is a placeholder name until the npm scope and package name are confirmed.
+Scope: `@inspectordotai/ai-inspector` (placeholder until you claim your own, see Publishing).
 
 ## Repository layout
 
@@ -28,11 +28,11 @@ bun run build
 
 Entry points:
 
-- `@yourname/ai-inspector` core
-- `@yourname/ai-inspector/node` Node preset and JSONL exporter
-- `@yourname/ai-inspector/ai-sdk` Vercel AI SDK wrappers
-- `@yourname/ai-inspector/openai` OpenAI-compatible client proxy
-- `@yourname/ai-inspector/otel` OTLP/HTTP exporter
+- `@inspectordotai/ai-inspector` core
+- `@inspectordotai/ai-inspector/node` Node preset and JSONL exporter
+- `@inspectordotai/ai-inspector/ai-sdk` Vercel AI SDK wrappers
+- `@inspectordotai/ai-inspector/openai` OpenAI-compatible client proxy
+- `@inspectordotai/ai-inspector/otel` OTLP/HTTP exporter
 
 Full package documentation is in [`packages/ai-inspector/README.md`](packages/ai-inspector/README.md).
 

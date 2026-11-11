@@ -25,13 +25,13 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
-const INSTALL = "npm i @yourname/ai-inspector";
+const INSTALL = "npm i @inspectordotai/ai-inspector";
 
 const samples = {
   node: {
     label: "Node",
     file: "server.ts",
-    code: `import { createNodeInspector } from "@yourname/ai-inspector/node";
+    code: `import { createNodeInspector } from "@inspectordotai/ai-inspector/node";
 
 const inspector = createNodeInspector({
   serviceName: "support-api",
@@ -57,7 +57,7 @@ await inspector.trace("support-request", async (trace) => {
     label: "AI SDK",
     file: "chat.ts",
     code: `import { generateText } from "ai";
-import { instrumentAiSdk } from "@yourname/ai-inspector/ai-sdk";
+import { instrumentAiSdk } from "@inspectordotai/ai-inspector/ai-sdk";
 
 const ai = instrumentAiSdk(inspector, { generateText });
 
@@ -72,7 +72,7 @@ const result = await ai.generateText({
   otel: {
     label: "OTLP",
     file: "collector.ts",
-    code: `import { otlpHttpExporter } from "@yourname/ai-inspector/otel";
+    code: `import { otlpHttpExporter } from "@inspectordotai/ai-inspector/otel";
 
 const inspector = createNodeInspector({
   file: false,
@@ -533,7 +533,7 @@ export default function Landing() {
                 </div>
                 <div className="overflow-x-auto p-4 font-mono text-[10.5px] leading-[1.9] text-foreground/75 md:text-[11px]">
                   <p>
-                    <span className="text-primary">$</span> npx @yourname/ai-inspector list
+                    <span className="text-primary">$</span> npx @inspectordotai/ai-inspector list
                   </p>
                   <p className="mt-2 text-muted-foreground">
                     ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; STARTED&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DURATION&nbsp; TOKENS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; COST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; STATUS
@@ -548,7 +548,7 @@ export default function Landing() {
                     c10b8e4f&nbsp; Nov 11 09:02&nbsp; checkout-agent&nbsp; 0.61s&nbsp;&nbsp;&nbsp;&nbsp; 280 / 40&nbsp;&nbsp;&nbsp;&nbsp; $0.00070&nbsp; error
                   </p>
                   <p className="mt-3">
-                    <span className="text-primary">$</span> npx @yourname/ai-inspector show last
+                    <span className="text-primary">$</span> npx @inspectordotai/ai-inspector show last
                   </p>
                   <p className="mt-1 text-muted-foreground">
                     [trace] checkout-agent&nbsp; 610ms&nbsp; error&nbsp; in 280 · out 40
@@ -661,10 +661,10 @@ export default function Landing() {
                 </p>
                 <button
                   type="button"
-                  onClick={() => copyText("npx @yourname/ai-inspector show last")}
+                  onClick={() => copyText("npx @inspectordotai/ai-inspector show last")}
                   className="mt-4 flex w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 font-mono text-[10.5px] text-foreground/80 hover:border-primary/30"
                 >
-                  <span className="truncate">npx @yourname/ai-inspector show last</span>
+                  <span className="truncate">npx @inspectordotai/ai-inspector show last</span>
                   <Copy className="size-3.5 shrink-0 text-muted-foreground" />
                 </button>
               </div>
@@ -746,7 +746,7 @@ export default function Landing() {
           </div>
           <div className="flex flex-col justify-between gap-2 border-t border-border/60 pt-5 font-mono text-[10px] text-muted-foreground/80 sm:flex-row">
             <span>© 2026 AI Inspector contributors</span>
-            <span>@yourname/ai-inspector · v0.1.0</span>
+            <span>@inspectordotai/ai-inspector · v0.1.0</span>
           </div>
         </div>
       </footer>

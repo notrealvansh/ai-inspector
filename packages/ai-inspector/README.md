@@ -1,4 +1,4 @@
-# @yourname/ai-inspector
+# @inspectordotai/ai-inspector
 
 Traces for TypeScript AI applications. Record model calls, prompts, responses, token usage, latency, time to first token, tool calls, errors, estimated cost, and evaluation scores. Traces stay on your machine unless you add an exporter.
 
@@ -18,9 +18,9 @@ Requires Node 18.17 or newer for the Node entry point. The core also runs in bro
 ## Install
 
 ```bash
-npm install @yourname/ai-inspector
-# pnpm add @yourname/ai-inspector
-# bun add @yourname/ai-inspector
+npm install @inspectordotai/ai-inspector
+# pnpm add @inspectordotai/ai-inspector
+# bun add @inspectordotai/ai-inspector
 ```
 
 ## Quick start
@@ -28,7 +28,7 @@ npm install @yourname/ai-inspector
 The Node preset uses `AsyncLocalStorage` for context propagation and writes one JSON object per trace to `.ai-inspector/traces.ndjson`.
 
 ```ts
-import { createNodeInspector } from "@yourname/ai-inspector/node";
+import { createNodeInspector } from "@inspectordotai/ai-inspector/node";
 
 const inspector = createNodeInspector({
   serviceName: "support-api",
@@ -66,7 +66,7 @@ The trace is exported when `inspector.trace` finishes. File writes are serialize
 If you only need browser or framework-neutral tracing, use the core:
 
 ```ts
-import { createInspector, consoleExporter } from "@yourname/ai-inspector";
+import { createInspector, consoleExporter } from "@inspectordotai/ai-inspector";
 
 const inspector = createInspector({
   exporters: [consoleExporter()],
@@ -80,8 +80,8 @@ Pass the SDK functions you want observed. The wrapper does not modify the SDK an
 ```ts
 import { generateText, streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { createNodeInspector } from "@yourname/ai-inspector/node";
-import { instrumentAiSdk } from "@yourname/ai-inspector/ai-sdk";
+import { createNodeInspector } from "@inspectordotai/ai-inspector/node";
+import { instrumentAiSdk } from "@inspectordotai/ai-inspector/ai-sdk";
 
 const inspector = createNodeInspector({ serviceName: "chat-api" });
 const ai = instrumentAiSdk(inspector, { generateText, streamText });
@@ -102,8 +102,8 @@ Supported wrappers: `generateText`, `generateObject`, `streamText`, `embed`, and
 
 ```ts
 import OpenAI from "openai";
-import { createNodeInspector } from "@yourname/ai-inspector/node";
-import { instrumentOpenAI } from "@yourname/ai-inspector/openai";
+import { createNodeInspector } from "@inspectordotai/ai-inspector/node";
+import { instrumentOpenAI } from "@inspectordotai/ai-inspector/openai";
 
 const inspector = createNodeInspector({ serviceName: "agent" });
 const openai = instrumentOpenAI(inspector, new OpenAI(), {
@@ -208,7 +208,7 @@ Embedding spans report zero output tokens because embedding models do not genera
 Scorers are plain functions and run locally. No judge model is required.
 
 ```ts
-import { scorers } from "@yourname/ai-inspector";
+import { scorers } from "@inspectordotai/ai-inspector";
 
 const scores = await inspector.evaluate({
   name: "answer-quality",
@@ -234,8 +234,8 @@ Wrap an evaluation in `inspector.trace` to attach it to an application trace. Ca
 Export the same traces to any OTLP/HTTP collector. Trace and span ids are W3C/OpenTelemetry compatible, and generation spans carry `gen_ai.*` attributes.
 
 ```ts
-import { createNodeInspector } from "@yourname/ai-inspector/node";
-import { otlpHttpExporter } from "@yourname/ai-inspector/otel";
+import { createNodeInspector } from "@inspectordotai/ai-inspector/node";
+import { otlpHttpExporter } from "@inspectordotai/ai-inspector/otel";
 
 const inspector = createNodeInspector({
   file: false,
@@ -258,11 +258,11 @@ The package does not bundle the OpenTelemetry SDK. It emits OTLP directly, which
 Local traces are readable without this package's dashboard:
 
 ```bash
-npx @yourname/ai-inspector list
-npx @yourname/ai-inspector show last
-npx @yourname/ai-inspector show 4f2a1c0b --json
-npx @yourname/ai-inspector stats
-npx @yourname/ai-inspector clear --yes
+npx @inspectordotai/ai-inspector list
+npx @inspectordotai/ai-inspector show last
+npx @inspectordotai/ai-inspector show 4f2a1c0b --json
+npx @inspectordotai/ai-inspector stats
+npx @inspectordotai/ai-inspector clear --yes
 ```
 
 Once installed, the binary is available as `ai-inspector`.
@@ -273,11 +273,11 @@ The default file is `.ai-inspector/traces.ndjson`. Override it with `--file path
 
 | Import | Purpose |
 | --- | --- |
-| `@yourname/ai-inspector` | Core inspector, types, exporters, scorers, pricing |
-| `@yourname/ai-inspector/node` | Async context, JSONL file exporter, Node preset |
-| `@yourname/ai-inspector/ai-sdk` | AI SDK wrappers |
-| `@yourname/ai-inspector/openai` | OpenAI-compatible client proxy |
-| `@yourname/ai-inspector/otel` | OTLP/HTTP exporter and mapper |
+| `@inspectordotai/ai-inspector` | Core inspector, types, exporters, scorers, pricing |
+| `@inspectordotai/ai-inspector/node` | Async context, JSONL file exporter, Node preset |
+| `@inspectordotai/ai-inspector/ai-sdk` | AI SDK wrappers |
+| `@inspectordotai/ai-inspector/openai` | OpenAI-compatible client proxy |
+| `@inspectordotai/ai-inspector/otel` | OTLP/HTTP exporter and mapper |
 | `ai-inspector` | CLI |
 
 All entry points ship ESM, CommonJS, and TypeScript declarations.

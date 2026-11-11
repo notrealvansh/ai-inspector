@@ -1,9 +1,9 @@
 {
-  "name": "@yourname/ai-inspector",
+  "name": "@inspectordotai/ai-inspector",
   "version": "0.1.0",
   "description": "Local-first traces for TypeScript AI apps: model calls, tokens, latency, tools, costs, and evals.",
   "license": "MIT",
-  "author": "AI Inspector contributors",
+  "author": "Inspectordotai",
   "type": "module",
   "sideEffects": false,
   "engines": {
@@ -51,14 +51,17 @@
   },
   "keywords": [
     "ai",
+    "llm",
     "observability",
     "tracing",
     "opentelemetry",
-    "llm",
     "vercel-ai-sdk",
     "openai",
     "evaluation",
-    "typescript"
+    "typescript",
+    "monitoring",
+    "debugging",
+    "local-first"
   ],
   "scripts": {
     "build": "tsup",
