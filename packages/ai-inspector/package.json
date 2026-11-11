@@ -4,6 +4,9 @@
   "description": "Local-first traces for TypeScript AI apps: model calls, tokens, latency, tools, costs, and evals.",
   "license": "MIT",
   "author": "lithiumdevs",
+  "homepage": "https://github.com/lithiumdevs/ai-inspector#readme",
+  "repository": "git+https://github.com/lithiumdevs/ai-inspector.git",
+  "bugs": "https://github.com/lithiumdevs/ai-inspector/issues",
   "type": "module",
   "sideEffects": false,
   "engines": {

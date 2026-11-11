@@ -4,7 +4,9 @@ Local-first traces for TypeScript AI applications, plus a workbench for reading 
 
 The package records model calls, prompts and responses, token usage, latency, time to first token, tool calls, errors, estimated costs, and evaluation scores. It writes to a local NDJSON file by default, with optional OpenTelemetry export. No hosted service or API key is required.
 
-Scope: `@lithiumdevs/ai-inspector`. Use this until you claim your own npm scope.
+Package: `@lithiumdevs/ai-inspector`.
+
+Source: https://github.com/lithiumdevs/ai-inspector
 
 ## Repository layout
 
@@ -35,6 +37,8 @@ Entry points:
 - `@lithiumdevs/ai-inspector/otel` OTLP/HTTP exporter
 
 Full package documentation is in [`packages/ai-inspector/README.md`](packages/ai-inspector/README.md).
+
+Publishing is covered in that README.
 
 ## Workbench
 
@@ -72,7 +76,7 @@ The package test suite covers trace lifecycles, async context isolation, capture
 
 ## Publishing
 
-The npm name in `packages/ai-inspector/package.json` is a placeholder. Replace `@lithiumdevs/ai-inspector` with the name you control, add your `repository`, `homepage`, and `bugs` URLs, then publish from the package directory:
+Publishing is covered in `packages/ai-inspector/README.md` under Publishing.
 
 ```bash
 cd packages/ai-inspector
